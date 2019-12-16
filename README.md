@@ -1,0 +1,2 @@
+# oauth_chain
+Blockchainシステム的なsomethingを作りたい
