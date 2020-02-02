@@ -1,5 +1,7 @@
 package model
 
 type Data struct {
-	Amount int
+	SenderAddress	int
+	ReceiverAddress	int
+	Amount 			int
 }
