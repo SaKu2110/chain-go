@@ -2,7 +2,7 @@ package blockchain
 
 import(
 	"fmt"
-	"time"
+	// "time"
 	"testing"
 	"github.com/SaKu2110/oauth_chain/model"
 )
@@ -14,8 +14,9 @@ func TestSuccess(t *testing.T) {
 	block := Block{
 		Index: 0,
 		previousHash: "Genesis block",
-		Timestamp: time.Now().Add(time.Hour * 72).Unix(),
-		Data: data,
+		// Timestamp: time.Now().Add(time.Hour * 72).Unix(),
+		Transaction: data,
+		Nonce: 5555,
 	}
 	hash, _ := block.CreateHash()
 	fmt.Printf("%x\n", hash)
@@ -28,9 +29,9 @@ func TestSuccess(t *testing.T) {
 		Amount: 100,
 	}
 	block = Block{
-		Index: 1,
-		Timestamp: time.Now().Add(time.Hour * 72).Unix(),
-		Data: data,
+		// Timestamp: time.Now().Add(time.Hour * 72).Unix(),
+		Transaction: data,
+		Nonce: 5555,
 	}
 	_ =coin.AddBlock(block)
 	fmt.Printf("%x\n", coin.Hash)
@@ -39,9 +40,9 @@ func TestSuccess(t *testing.T) {
 		Amount: 10,
 	}
 	block = Block{
-		Index: 2,
-		Timestamp: time.Now().Add(time.Hour * 72).Unix(),
-		Data: data,
+		// Timestamp: time.Now().Add(time.Hour * 72).Unix(),
+		Transaction: data,
+		Nonce: 5556,
 	}
 	_ =coin.AddBlock(block)
 	fmt.Printf("%x\n", coin.Hash)
