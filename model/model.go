@@ -1,7 +1,7 @@
 package model
 
 type Data struct {
-	SenderAddress	int
-	ReceiverAddress	int
-	Amount 			int
+	SenderAddress	string // Sender user address
+	ReceiverAddress	string // Receiver user address
+	Amount	float64 // Transaction amount 
 }

@@ -9,9 +9,10 @@ import(
 
 type Block struct {
 	Index			int `json:"index"`
-	previousHash	string `json:"previoushash"`
 	Timestamp		int64 `json:"timestamp"`
-	Data			model.Data `json:"data"`
+	Transaction		model.Data `json:"data"`
+	Nonce			int `json:"nonce"`
+	previousHash	string`json:"previoushash"`
 }
 
 type BlockChain struct {
@@ -25,7 +26,7 @@ func (block *Block)CreateHash() ([]byte, error){
 	}
 	data := string(byteData)
 	hash := sha256.Sum256(
-		[]byte(string(block.Index) + block.previousHash + string(block.Timestamp) + data),
+		[]byte(data),
 	)
 	return hash[:], nil
 }
