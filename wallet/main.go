@@ -11,9 +11,10 @@ import(
 	"github.com/SaKu2110/oauth_chain/wallet/config"
 	"github.com/SaKu2110/oauth_chain/wallet/controller"
 	"github.com/SaKu2110/oauth_chain/wallet/model"
+	w "github.com/SaKu2110/oauth_chain/wallet/wallet"
 )
 
-func mian(){
+func main(){
 	db, err := initializeDataBase()
 	if err != nil {
 		log.Fatalf("failed initialize db. err=%s", err)
@@ -21,7 +22,13 @@ func mian(){
 
 	defer db.Close()
 
-	ctrl := initializeController(db)
+	var wallet *w.Wallet
+	wallet, err = w.InitializeWallet()
+	if err != nil {
+		log.Fatalf("failed initialize db. err=%s", err)
+	}
+
+	ctrl := initializeController(db, wallet)
 	router := setupRouter(ctrl)
 	err = router.Run(":9005")
 	if err != nil {
@@ -42,6 +49,7 @@ func initializeDataBase() (*gorm.DB, error){
 		}
 		db, err = gorm.Open("mysql", token)
 		if err == nil {
+			db.AutoMigrate(&model.Hash{})
 			return db, nil
 		}
 		time.Sleep(3 * time.Second)
@@ -52,8 +60,11 @@ func initializeDataBase() (*gorm.DB, error){
 	return nil, err
 }
 
-func initializeController(db *gorm.DB) (controller.IsController){
-	return controller.IsController{DB: db}
+func initializeController(db *gorm.DB, wallet *w.Wallet) (controller.IsController){
+	return controller.IsController{
+		DB: db,
+		Wallet: wallet,
+	}
 }
 
 func setupRouter(ctrl controller.IsController) *gin.Engine {
@@ -61,6 +72,6 @@ func setupRouter(ctrl controller.IsController) *gin.Engine {
 	router.GET("/", func(c *gin.Context){
 		c.JSON(http.StatusOK, gin.H{"message": "This is Card-Info API"})
 	})
-	router.POST("/set", ctrl.SetCardInfo)
+	router.POST("/transaction", ctrl.CreateTransaction)
 	return router
 }
