@@ -39,7 +39,7 @@ func init() {
 		log.Fatal(err)
 	}
 	rng = rand.Reader
-	label = []byte("label")
+	label = []byte(os.Getenv("LABEL"))
 	publicKey = &privateKey.PublicKey
 }
 
