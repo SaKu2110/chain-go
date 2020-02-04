@@ -2,6 +2,7 @@ package wallet
 
 import(
 	"io"
+	"os"
 	"log"
 	"time"
 	"crypto/rsa"
@@ -33,7 +34,7 @@ var(
 )
 
 func init() {
-	privateKey, err := config.ReadRsaPrivateKey("/Users/shotaro-yamada/go/src/github.com/SaKu2110/oauth_chain/private_key.pem")
+	privateKey, err := config.ReadRsaPrivateKey(os.Getenv("PRIVATE_KEY"))
 	if err != nil {
 		log.Fatal(err)
 	}

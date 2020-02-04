@@ -27,7 +27,7 @@ func TestCreateTransaction(t *testing.T){
 		t.Fatalf("failed test %#v", err)
 	}
 	// 複合
-	privateKey, err = config.ReadRsaPrivateKey("/Users/shotaro-yamada/go/src/github.com/SaKu2110/oauth_chain/private_key.pem")
+	privateKey, err = config.ReadRsaPrivateKey(os.Getenv("PRIVATE_KEY"))
 	blockData, err = rsa.DecryptOAEP(sha256.New(), rng, privateKey, block, label)
 	fmt.Println(string(blockData))
 
