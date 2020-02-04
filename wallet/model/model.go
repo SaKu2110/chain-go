@@ -1,7 +1,11 @@
 package model
 
-type Data struct {
-	SenderAddress	string // Sender user address
-	ReceiverAddress	string // Receiver user address
-	Amount	float64 // Transaction amount 
+import(
+	// "encoding/json"
+)
+
+type Transaction struct {
+	SenderAddress	string `json:"sender"`
+	ReceiverAddress	string `json:"receiver"`
+	Amount	float64 `json:"amount"`
 }
