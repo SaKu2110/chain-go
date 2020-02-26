@@ -10,6 +10,8 @@ service NodeNetwork {
     rpc GetTransaction (MinerInfo) returns (Transactions);
     // 採掘結果を公開する
     rpc PublishResult (stream MinerInfo) returns (stream Broadcast) {}
+    // 検証結果を報告
+    rpc ValidateNonce (MinerInfo) returns (Result);
 }
 
 message MinerInfo {
@@ -32,4 +34,8 @@ message Broadcast {
     bytes transactions = 1;
     int64 nonce = 2;
     string miner = 3;
+}
+
+message Result {
+    bool status = 1;
 }
