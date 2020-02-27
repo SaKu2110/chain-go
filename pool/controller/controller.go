@@ -18,7 +18,7 @@ type Controller struct{
 	Chain *chain.Chain
 	// ここ以降は変更がない部分
 	network.UnimplementedNodeNetworkServer
-	Nodes map[string]network.NodeNetwork_PublishResultServer
+	Nodes map[string]network.NodeNetwork_ShareResultServer
 	Mutex sync.RWMutex
 	DB *gorm.DB
 }
@@ -62,7 +62,7 @@ func (ctrl *Controller) GetTransaction(ctx context.Context, request *network.Min
 	return &network.Transactions{Data: jsonData}, nil
 }
 
-func (ctrl *Controller) addClient(userid string, srv network.NodeNetwork_PublishResultServer) {
+func (ctrl *Controller) addClient(userid string, srv network.NodeNetwork_ShareResultServer) {
 	ctrl.Mutex.Lock()
 	defer ctrl.Mutex.Unlock()
 	ctrl.Nodes[userid] = srv
@@ -74,8 +74,8 @@ func (ctrl *Controller) removeClient(userid string) {
 	delete(ctrl.Nodes, userid)
 }
 
-func (ctrl *Controller) getClients() []network.NodeNetwork_PublishResultServer {
-	var cs []network.NodeNetwork_PublishResultServer
+func (ctrl *Controller) getClients() []network.NodeNetwork_ShareResultServer {
+	var cs []network.NodeNetwork_ShareResultServer
 
 	ctrl.Mutex.RLock()
 	defer ctrl.Mutex.RUnlock()
@@ -85,7 +85,7 @@ func (ctrl *Controller) getClients() []network.NodeNetwork_PublishResultServer {
 	return cs
 }
 
-func (ctrl *Controller) PublishResult(srv network.NodeNetwork_PublishResultServer) error {
+func (ctrl *Controller) ShareResult(srv network.NodeNetwork_ShareResultServer) error {
 	userid := uuid.Must(uuid.NewRandom()).String()
 	log.Printf("new user: %s", userid)
 

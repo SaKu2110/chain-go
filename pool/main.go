@@ -47,7 +47,7 @@ func initializeController(db *gorm.DB) (controller.Controller) {
 		Chain: &gbc,
 
 		DB: db,
-		Nodes: make(map[string]network.NodeNetwork_PublishResultServer),
+		Nodes: make(map[string]network.NodeNetwork_ShareResultServer),
 		Mutex: sync.RWMutex{},
 	}
 }

@@ -9,7 +9,7 @@ service NodeNetwork {
     // トランザクションを取得する
     rpc GetTransaction (MinerInfo) returns (Transactions);
     // 採掘結果を公開する
-    rpc PublishResult (stream MiningInfo) returns (stream MiningInfo) {}
+    rpc ShareResult (stream MiningInfo) returns (stream MiningInfo) {}
     // 検証結果を報告
     rpc ValidateNonce (CheckerInfo) returns (Response);
 }
