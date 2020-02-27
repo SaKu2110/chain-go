@@ -27,7 +27,9 @@ message Transactions {
 }
 
 message MiningInfo {
-    bytes data = 1;
+    bytes transactions = 1;
+    int64 nonce = 2;
+    string miner = 3;
 }
 
 message Broadcast {
