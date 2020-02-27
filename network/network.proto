@@ -11,7 +11,7 @@ service NodeNetwork {
     // 採掘結果を公開する
     rpc PublishResult (stream MiningInfo) returns (stream MiningInfo) {}
     // 検証結果を報告
-    rpc ValidateNonce (MinerInfo) returns (Result);
+    rpc ValidateNonce (MinerInfo) returns (Response);
 }
 
 message MinerInfo {
@@ -32,6 +32,6 @@ message MiningInfo {
     string miner = 3;
 }
 
-message Result {
+message Response {
     bool status = 1;
 }
