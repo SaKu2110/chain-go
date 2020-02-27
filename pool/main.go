@@ -9,6 +9,7 @@ import(
 	"google.golang.org/grpc"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/SaKu2110/chain_dev/chain"
 	"github.com/SaKu2110/chain_dev/network"
 	"github.com/SaKu2110/chain_dev/pool/config"
 	"github.com/SaKu2110/chain_dev/pool/controller"
@@ -38,7 +39,13 @@ func initializeDataBase() (*gorm.DB, error) {
 }
 
 func initializeController(db *gorm.DB) (controller.Controller) {
+	gbc := chain.Chain{}
+	gbc.CreateGenesisBlock()
+
 	return controller.Controller{
+		// TODO: 後に廃止する部分
+		Chain: &gbc,
+
 		DB: db,
 		Nodes: make(map[string]network.NodeNetwork_PublishResultServer),
 		Mutex: sync.RWMutex{},
