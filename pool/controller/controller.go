@@ -29,9 +29,9 @@ func (ctrl *Controller) SyncChain(ctx context.Context, request *network.MinerInf
 		return &network.ChainInfo{}, nil
 	}
 	// blockchain 取得
-	list := ctrl.Chain
+
 	// jsonデータ化
-	jsonData, err := json.Marshal(&list)
+	jsonData, err := json.Marshal(&ctrl.Chain)
 	if err != nil {
 		return nil, err
 	}
