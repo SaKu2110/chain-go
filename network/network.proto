@@ -1,0 +1,41 @@
+
+syntax = "proto3";
+
+package network;
+
+service NodeNetwork {
+    // blockchainを同期する
+    rpc SyncChain (MinerInfo) returns (ChainInfo);
+    // トランザクションを取得する
+    rpc GetTransaction (MinerInfo) returns (Transactions);
+    // 採掘結果を公開する
+    rpc ShareResult (stream MiningInfo) returns (stream MiningInfo) {}
+    // 検証結果を報告
+    rpc ValidateNonce (CheckerInfo) returns (Response);
+}
+
+message MinerInfo {
+    string name = 1;
+}
+
+message ChainInfo {
+    bytes data = 1;
+}
+
+message Transactions {
+    bytes data = 1;
+}
+
+message MiningInfo {
+    bytes transactions = 1;
+    int64 nonce = 2;
+    string miner = 3;
+}
+
+message CheckerInfo {
+    string name = 1;
+    bool status = 2;
+}
+
+message Response {
+}
