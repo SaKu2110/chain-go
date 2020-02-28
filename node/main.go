@@ -2,7 +2,6 @@ package main
 
 import(
 	"log"
-	"time"
 	"context"
 	"encoding/json"
 	"google.golang.org/grpc"
@@ -39,28 +38,35 @@ func main() {
 	miner.SyncChain()
 
 	var stream network.NodeNetwork_ShareResultClient
+	condition := true
 	stream, err = miner.ShareResult()
 	if err != nil {
 		log.Fatal(err)
 	}
 	go func() {
 		for {
+			if !condition {
+				continue
+			}
 			miner.GetTransaction()
-
+	
 			// mining
+			miner.Block.Mine(miner.Chain)
+
 			jsonData, err := json.Marshal(&miner.Block.Transactions)
 			if err != nil {
 				log.Fatalf("couldn't change json data: %v", err)
 			}
 			err = stream.SendMsg(&network.MiningInfo{
+				Index: int64(len(miner.Chain) + 1),
 				Transactions: jsonData,
-				Nonce: int64(0),
+				Nonce: int64(miner.Block.Nonce),
 				Miner: miner.Name,
 			})
 			if err != nil {
 				log.Fatal(err)
 			}
-			time.Sleep(1*time.Second)
+			condition = false
 		}
 	}()
 	for {
@@ -68,10 +74,17 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		// mining 結果を判定
-		log.Printf("%s\n", response.Miner)
+		if response.Miner == miner.Name {
+			condition = true
+		}
 
-		miner.ValidateNonce(true)
+
+		result, hash := miner.Block.ValidateBlocks(miner.Chain, int(response.Nonce))
+		if result {
+			miner.Chain = append(miner.Chain, hash)
+		}
+
+		miner.ValidateNonce(result)
 	}
 }
