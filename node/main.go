@@ -64,7 +64,7 @@ func main() {
 				log.Fatal(err)
 			}
 
-			// 
+			// いったんスリープ噛ませる
 			time.Sleep(time.Second * 5)
 		}
 	}()
