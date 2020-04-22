@@ -2,6 +2,7 @@ package main
 
 import(
 	"log"
+	"time"
 	"context"
 	"encoding/json"
 	"google.golang.org/grpc"
@@ -38,16 +39,12 @@ func main() {
 	miner.SyncChain()
 
 	var stream network.NodeNetwork_ShareResultClient
-	condition := true
 	stream, err = miner.ShareResult()
 	if err != nil {
 		log.Fatal(err)
 	}
 	go func() {
 		for {
-			if !condition {
-				continue
-			}
 			miner.GetTransaction()
 	
 			// mining
@@ -66,7 +63,9 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			condition = false
+
+			// 
+			time.Sleep(time.Second * 5)
 		}
 	}()
 	for {
@@ -75,9 +74,6 @@ func main() {
 			log.Fatal(err)
 		}
 		// mining 結果を判定
-		if response.Miner == miner.Name {
-			condition = true
-		}
 
 
 		result, hash := miner.Block.ValidateBlocks(miner.Chain, int(response.Nonce))
