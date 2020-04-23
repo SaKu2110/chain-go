@@ -35,7 +35,7 @@ func (ctrl *Controller) SyncChain() {
 	log.Printf("node: Completed synchronization with pool server\n")
 }
 
-func (ctrl *Controller) GetTransaction() {
+func (ctrl *Controller) GetTransaction() ( bool ) {
 	result, err := ctrl.Client.GetTransaction(
 		ctrl.CTX,
 		&network.MinerInfo{
@@ -44,12 +44,13 @@ func (ctrl *Controller) GetTransaction() {
 	)
 	if err != nil {
 		log.Fatalf("node: couldn't get transaction: %v", err)
+		return false
 	}
 	err = json.Unmarshal(result.GetData(), &ctrl.Block)
 	if err != nil {
 		log.Fatalf("node: JSON data restore failed: %v", err)
 	}
-	log.Printf("node: Successfully obtained Transaction\n")
+	return result.GetStatus()
 }
 
 // network.ShareReult()を行うためのチャンネルに入る処理

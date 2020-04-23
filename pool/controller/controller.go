@@ -49,6 +49,9 @@ func (ctrl *Controller) GetTransaction(ctx context.Context, request *network.Min
 	// transactionの取得
 	// TODO: DBから引っ張ってくる
 	var trs []chain.Transaction
+	// TODO: 配列の長さを判定する
+	ExistenceOfTransaction := true
+
 	// jsonデータ化
 	jsonData, err := json.Marshal(&chain.Block{
 		Transactions: trs,
@@ -59,7 +62,10 @@ func (ctrl *Controller) GetTransaction(ctx context.Context, request *network.Min
 	// TODO: 暗号化
 
 	log.Printf("pool: Shared transaction information to %s\n", request.GetName())
-	return &network.Transactions{Data: jsonData}, nil
+	return &network.Transactions{
+			Status: ExistenceOfTransaction,
+			Data: jsonData,
+		}, nil
 }
 
 func (ctrl *Controller) addClient(userid string, srv network.NodeNetwork_ShareResultServer) {

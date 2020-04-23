@@ -46,8 +46,13 @@ func main() {
 	go func() {
 		// Nunce採掘作業
 		for {
-			miner.GetTransaction()
-			// ここでトランザクションの有無を判別できるようにしたい
+			// Transactionが空かを判別
+			if !miner.GetTransaction() {
+				// リクエスト数を減らしてpoolの負荷を下げる
+				time.Sleep(time.Second / 2)
+				continue
+			}
+			log.Printf("node: Successfully obtained Transaction\n")
 	
 			// mining
 			miner.Block.Mine(miner.Chain)
@@ -65,9 +70,6 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-
-			// いったんスリープ噛ませる
-			time.Sleep(time.Second * 5)
 		}
 	}()
 	// hash検証作業
