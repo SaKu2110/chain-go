@@ -44,8 +44,10 @@ func main() {
 		log.Fatal(err)
 	}
 	go func() {
+		// Nunce採掘作業
 		for {
 			miner.GetTransaction()
+			// ここでトランザクションの有無を判別できるようにしたい
 	
 			// mining
 			miner.Block.Mine(miner.Chain)
@@ -68,14 +70,14 @@ func main() {
 			time.Sleep(time.Second * 5)
 		}
 	}()
+	// hash検証作業
 	for {
 		response, err := stream.Recv()
 		if err != nil {
 			log.Fatal(err)
 		}
+		
 		// mining 結果を判定
-
-
 		result, hash := miner.Block.ValidateBlocks(miner.Chain, int(response.Nonce))
 		if result {
 			miner.Chain = append(miner.Chain, hash)

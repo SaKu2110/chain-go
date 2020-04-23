@@ -23,6 +23,7 @@ message ChainInfo {
 }
 
 message Transactions {
+    // bool値欲しい
     bytes data = 1;
 }
 
