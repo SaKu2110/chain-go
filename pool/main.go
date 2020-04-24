@@ -1,6 +1,7 @@
 package main
 
 import(
+	"os"
 	"fmt"
 	"log"
 	"net"
@@ -54,7 +55,7 @@ func initializeController(db *gorm.DB) (controller.Controller) {
 
 func main(){
 	var db *gorm.DB
-	addr := ":50051"
+	addr := ":" + os.Getenv("LISTEN_ADDR")
 	listen, err := net.Listen("tcp", addr)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
