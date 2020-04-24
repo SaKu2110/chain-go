@@ -29,8 +29,9 @@ func initializeController(connection *grpc.ClientConn) *controller.Controller {
 }
 
 func main() {
+	ip := os.Getenv("LISTEN_IP")
 	addr := os.Getenv("LISTEN_ADDR")
-	connection, err := connectPoolServer("localhost:" + addr)
+	connection, err := connectPoolServer(ip + ":" + addr)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
