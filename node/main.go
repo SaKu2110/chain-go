@@ -1,6 +1,7 @@
 package main
 
 import(
+	"os"
 	"log"
 	"time"
 	"context"
@@ -28,7 +29,8 @@ func initializeController(connection *grpc.ClientConn) *controller.Controller {
 }
 
 func main() {
-	connection, err := connectPoolServer("localhost:50051")
+	addr := os.Getenv("LISTEN_ADDR")
+	connection, err := connectPoolServer("localhost:" + addr)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
