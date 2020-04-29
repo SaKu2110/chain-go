@@ -3,5 +3,14 @@
 ## Setup
 ### golangのソースコード生成
 ```
-protoc --go_out=plugins=grpc:./ ./network.proto
+$ protoc --go_out=plugins=grpc:./ ./network.proto
+```
+### localhostで実行する
+```
+$ sh build.sh
+$ sh launch_master.sh
+```
+別のターミナルを開いて以下を実行する
+```
+$ sh launch_miner.sh
 ```
