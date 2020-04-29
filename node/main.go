@@ -9,6 +9,7 @@ import(
 	"google.golang.org/grpc"
 	"github.com/SaKu2110/chain_dev/network"
 	"github.com/SaKu2110/chain_dev/node/config"
+	"github.com/SaKu2110/chain_dev/node/system"
 	"github.com/SaKu2110/chain_dev/node/controller"
 )
 
@@ -55,6 +56,7 @@ func main() {
 				time.Sleep(time.Second / 2)
 				continue
 			}
+			// Debug Code
 			log.Printf("node: Successfully obtained Transaction\n")
 	
 			// mining
@@ -86,8 +88,11 @@ func main() {
 		result, hash := miner.Block.ValidateBlocks(miner.Chain, int(response.Nonce))
 		if result {
 			miner.Chain = append(miner.Chain, hash)
+			err = system.EditLogFile(miner.Block, hash)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
-
 		miner.ValidateNonce(result)
 	}
 }
