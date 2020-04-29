@@ -20,8 +20,8 @@ func createHash(block *Block) ([32]byte, error){
 
 func (blck *Block) setBlockData(chain [][32]byte) *Block {
 	return &Block{
-		Index: len(blck.Transactions) + 1,
-		PreviousHash: chain[len(blck.Transactions)][:],
+		Index: len(chain),
+		PreviousHash: chain[len(chain) - 1][:],
 		Transactions: blck.Transactions,
 		Root: chain[0][:],
 	}
@@ -62,5 +62,13 @@ func (blck *Block) ValidateBlocks(chain [][32]byte, nonce int) (bool, [32]byte) 
 		log.Fatalf("couldn't create hash: %v", err)
 	}
 
-	return checkHash(hash, 2), hash
+	result := checkHash(hash, 2)
+	if result {
+		blck.Index = block.Index
+		blck.PreviousHash = block.PreviousHash
+		blck.Transactions = block.Transactions
+		blck.Nonce = nonce
+		blck.Root = block.Root
+	}
+	return result, hash
 }
